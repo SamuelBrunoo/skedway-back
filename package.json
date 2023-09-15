@@ -2,10 +2,12 @@
   "name": "skedway",
   "version": "1.0.0",
   "description": "",
-  "main": "src/server.ts",
+  "main": "index.js",
   "scripts": {
     "start": "nodemon src/server.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsup api",
+    "vercel-build": "echo hello"
   },
   "author": "",
   "license": "ISC",
@@ -13,7 +15,8 @@
     "axios": "^1.5.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "tsup": "^7.2.0"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
