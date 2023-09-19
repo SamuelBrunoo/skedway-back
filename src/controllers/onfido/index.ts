@@ -23,14 +23,14 @@ export const getSDKToken = async (req: Request, res: Response) => {
 
   if (userId && userId.trim() !== '') {
     try {
-      const req = await a.post(
+      const info = await a.post(
         '/sdk_token',
         JSON.stringify({
           applicant_id: userId,
           application_id: '*'
         })
       )
-      const data = req.data
+      const data = info.data
       res.status(200).json({ token: data.token })
 
     } catch (error) {
@@ -69,6 +69,53 @@ export const getWorkflowRunId = async (req: Request, res: Response) => {
     res.status(400).json({
       success: false,
       error: { message: 'Invalid user' }
+    })
+  }
+}
+
+const getMotionCaptureId = async (userId: string) => {
+
+  const info = await a.get(`/motion_captures?applicant_id=${userId}`)
+  const motion = info.data.motion_captures[0]
+  const id = motion.id
+
+  return id ?? false
+}
+
+export const getMotionFrame = async (req: Request, res: Response) => {
+  const userId = req.query.applicant_id
+
+  if (userId) {
+    const motionId = await getMotionCaptureId(userId as string)
+
+    if (motionId) {
+
+      try {
+        a.get(`/motion_captures/${motionId}/frame`, {
+          responseType: 'arraybuffer'
+        })
+
+          .then(response => {
+            res.status(200).json({ buffer: response.data })
+          })
+
+      } catch (error) {
+        res.status(400).json({
+          success: false,
+          error: { message: 'Image not supported' }
+        })
+      }
+
+    } else {
+      res.status(400).json({
+        success: false,
+        error: { message: 'Motion does not exists' }
+      })
+    }
+  } else {
+    res.status(400).json({
+      success: false,
+      error: { message: 'Applicant_id not received' }
     })
   }
 }

@@ -11,7 +11,7 @@ dotenv.config()
 
 server.use(cors())
 server.use(express.json())
-server.use(express.urlencoded({ extended: true }));
+server.use(express.urlencoded({ extended: false }));
 server.use('/api', routes)
 
 server.use((req: Request, res: Response) => {
