@@ -18,6 +18,25 @@ const a = axios.create({
   }
 })
 
+export const createUser = async (req: Request, res: Response) => {
+  try {
+    const creation = await a.post(
+      '/applicants',
+      JSON.stringify({
+        fisrt_name: new Date().getTime(),
+        last_name: Math.floor(Math.random() * 1000) + 1
+      })
+    )
+
+    res.status(200).json({
+      success: true,
+      userId: creation.data.id
+    })
+  } catch (error) {
+    res.status(400).json({ success: false })
+  }
+}
+
 export const getSDKToken = async (req: Request, res: Response) => {
   const userId = req.body.applicant_id
 
@@ -117,5 +136,20 @@ export const getMotionFrame = async (req: Request, res: Response) => {
       success: false,
       error: { message: 'Applicant_id not received' }
     })
+  }
+}
+
+export const deleteUser = async (req: Request, res: Response) => {
+
+  try {
+    const userId = req.body.userId
+    const creation = await a.delete(`/applicants/${userId}`)
+
+    res.status(200).json({
+      success: true,
+      userId: creation.data.id
+    })
+  } catch (error) {
+    res.status(400).json({ success: false })
   }
 }
