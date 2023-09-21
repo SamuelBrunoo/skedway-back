@@ -94,18 +94,24 @@ export const getWorkflowRunId = async (req: Request, res: Response) => {
 
 const getMotionCaptureId = async (userId: string) => {
 
-  const info = await a.get(`/motion_captures?applicant_id=${userId}`)
-  const motion = info.data.motion_captures[0]
-  const id = motion.id
+  return a.get(`/motion_captures?applicant_id=${userId}`)
+    .then(info => {
+      const motion = info.data.motion_captures[0]
+      const id = motion.id
 
-  return id ?? false
+      return id
+    })
+    .catch(err => {
+      return false
+    })
+
 }
 
 export const getMotionFrame = async (req: Request, res: Response) => {
   const userId = req.query.applicant_id
 
   if (userId) {
-    const motionId = await getMotionCaptureId(userId as string)
+    const motionId = await getMotionCaptureId(String(userId))
 
     if (motionId) {
 
