@@ -23,7 +23,7 @@ export const createUser = async (req: Request, res: Response) => {
     const creation = await a.post(
       '/applicants',
       JSON.stringify({
-        fisrt_name: new Date().getTime(),
+        first_name: new Date().getTime(),
         last_name: Math.floor(Math.random() * 1000) + 1
       })
     )
